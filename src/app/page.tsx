@@ -2,6 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { searchPosts } from "./utils/searchUtils";
 
 export default function Home() {
 
@@ -31,15 +32,11 @@ export default function Home() {
         });
     };
 
-    function searchPosts() {
-        const filteredData = Object.values(data).filter((post: any) => post.title.toLowerCase().includes(search.toLowerCase()));
-        return filteredData;
-    }
 
     useEffect(() => {
-        const posts = searchPosts();
+        const posts = searchPosts(search, data);
         setSearchResult(posts);
-    }, [search]);
+    }, [search, data]);
 
     return (
         <div>
