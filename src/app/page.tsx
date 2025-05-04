@@ -22,14 +22,15 @@ export default function Home() {
     }
 
     const { isLoading } = useQuery({
-        // queryKey - used as identification for internal caching and some other things
-        queryKey: ["todos"],
+        // queryKey - used as identification for internal caching and some other things, just like dependency array of useEffect
+        queryKey: ["posts"],
         queryFn: fetchPosts,
+        staleTime: Infinity,
     });
 
-    const refetchTodos = async () => {
+    const refetchPosts = async () => {
         await queryClient.invalidateQueries({
-            queryKey: ["todos"],
+            queryKey: ["posts"],
         });
     };
 
@@ -43,7 +44,7 @@ export default function Home() {
         <div>
             <h1>Home</h1>
             <SearchBox value={search} onChange={(value) => setSearch(value)} />
-            <button onClick={async () => await refetchTodos()}>invalidate</button>
+            <button onClick={async () => await refetchPosts()}>invalidate</button>
             {
                 isLoading || !searchResult?.length || !search ? (
                     <div>{search ? "No Data Found" : "Type something to search"}</div>
