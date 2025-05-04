@@ -3,7 +3,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { searchPosts } from "./utils/searchUtils";
-import { SearchBox } from "./components/search";
+import { SearchBox, SearchResultItem } from "./components";
 
 export default function Home() {
 
@@ -51,10 +51,7 @@ export default function Home() {
                     <div>
                         {
                             searchResult?.map((post: any) => (
-                                <div key={post.id}>
-                                    <h2>{post.title}</h2>
-                                    <p>{post.body}</p>
-                                </div>
+                                <SearchResultItem key={post.id} post={post} />
                             ))
                         }
                     </div>
