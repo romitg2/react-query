@@ -3,6 +3,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { searchPosts } from "./utils/searchUtils";
+import { SearchBox } from "./components/search";
 
 export default function Home() {
 
@@ -41,7 +42,7 @@ export default function Home() {
     return (
         <div>
             <h1>Home</h1>
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <SearchBox value={search} onChange={(value) => setSearch(value)} />
             <button onClick={async () => await refetchTodos()}>invalidate</button>
             {
                 isLoading || !searchResult?.length || !search ? (
