@@ -37,10 +37,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        console.log("data: ", data);
-        console.log("search: ", search);
         const posts = searchPosts();
-        console.log("posts: ", posts);
         setSearchResult(posts);
     }, [search]);
 
@@ -50,7 +47,7 @@ export default function Home() {
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
             <button onClick={async () => await refetchTodos()}>invalidate</button>
             {
-                isLoading || !searchResult?.length | !search ? (
+                isLoading || !searchResult?.length || !search ? (
                     <div>{search ? "No Data Found" : "Type something to search"}</div>
                 ) : (
                     <div>
