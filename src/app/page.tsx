@@ -1,18 +1,25 @@
 'use client';
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+
+    const [data, setData] = useState<any>([]);
+    const [search, setSearch] = useState<string>("");
+    const [searchResult, setSearchResult] = useState<any>([]);
 
     const queryClient = useQueryClient();
 
     async function fetchPosts() {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-        return res.json();
+        const data = await res.json();
+        setData(data);
+        return data;
     }
 
-    const { data: todos, isLoading } = useQuery({
+    const { isLoading } = useQuery({
         // queryKey - used as identification for internal caching and some other things
         queryKey: ["todos"],
         queryFn: fetchPosts,
@@ -24,17 +31,31 @@ export default function Home() {
         });
     };
 
+    function searchPosts() {
+        const filteredData = Object.values(data).filter((post: any) => post.title.toLowerCase().includes(search.toLowerCase()));
+        return filteredData;
+    }
+
+    useEffect(() => {
+        console.log("data: ", data);
+        console.log("search: ", search);
+        const posts = searchPosts();
+        console.log("posts: ", posts);
+        setSearchResult(posts);
+    }, [search]);
+
     return (
         <div>
             <h1>Home</h1>
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
             <button onClick={async () => await refetchTodos()}>invalidate</button>
             {
-                isLoading ? (
-                    <div>Loading...</div>
+                isLoading || !searchResult?.length | !search ? (
+                    <div>{search ? "No Data Found" : "Type something to search"}</div>
                 ) : (
                     <div>
                         {
-                            todos?.map((post: any) => (
+                            searchResult?.map((post: any) => (
                                 <div key={post.id}>
                                     <h2>{post.title}</h2>
                                     <p>{post.body}</p>
